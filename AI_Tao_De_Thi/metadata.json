@@ -1,0 +1,5 @@
+{
+  "name": "AI Skill Assessor",
+  "description": "An application that uses AI to assess a student's skills based on a short quiz and provides detailed feedback and analysis.",
+  "requestFramePermissions": []
+}

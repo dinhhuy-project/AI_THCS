@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trợ lý học tập AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for beautiful math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <style>
+      /* --- Custom KaTeX Styles for Enhanced Readability --- */
+
+      /* General style for all KaTeX rendered elements */
+      .prose .katex {
+        font-size: 1.1em; /* Make math slightly larger */
+      }
+
+      /* Styles for inline math: $...$ */
+      /* We make it stand out subtly without disrupting the flow of text. */
+      .prose .katex:not(.katex-display) {
+          color: #0f766e; /* A darker teal (teal-700) for contrast */
+      }
+
+      /* Styles for display/block math: $$...$$ */
+      .katex-display {
+        background-color: #f0fdfa; /* A very light teal (teal-50) to match the theme */
+        border-left: 4px solid #14b8a6; /* A prominent teal color for the border (teal-500) */
+        padding: 1rem; /* More spacious padding */
+        margin: 1rem 0;
+        overflow-x: auto; /* Keep horizontal scroll for long formulas */
+        overflow-y: hidden;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        border-radius: 0 0.375rem 0.375rem 0; /* rounded-r-md */
+      }
+      .katex-display::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.28.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-teal-50">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

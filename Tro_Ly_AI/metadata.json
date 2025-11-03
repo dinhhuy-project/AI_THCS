@@ -1,0 +1,7 @@
+{
+  "name": "AI Learning Assistant for Vietnamese Students",
+  "description": "An AI-powered chat application designed to assist Vietnamese middle school students with their studies. It provides step-by-step explanations, helps with homework, and offers encouragement in a friendly, conversational manner.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

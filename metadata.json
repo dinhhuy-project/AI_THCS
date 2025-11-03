@@ -1,0 +1,5 @@
+{
+  "name": "AI Assistant Hub",
+  "description": "A web application that provides a sidebar to navigate between various AI assistant modules, such as a tutor, a review assistant, and a speech assistant.",
+  "requestFramePermissions": []
+}

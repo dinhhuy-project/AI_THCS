@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { ChatMessage } from '../types';
 
 interface ChatInterfaceProps {
@@ -52,7 +55,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ history, onSendMessage, i
                   : 'bg-white text-slate-800 rounded-bl-none'
               }`}
             >
-              <p className="text-sm">{msg.content}</p>
+              <div className="text-sm">
+                <ReactMarkdown
+                  remarkPlugins={[remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                  components={{
+                    p: ({ node, ...props }) => <p className="m-0" {...props} />,
+                  }}
+                >
+                  {msg.content}
+                </ReactMarkdown>
+              </div>
             </div>
           </div>
         ))}

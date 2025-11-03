@@ -8,7 +8,7 @@ import ChatInterface from './components/ChatInterface';
 import { GoogleGenAI, Chat } from '@google/genai';
 import FloatingIcons from './components/FloatingIcons';
 
-const AITaoDeThi: React.FC = () => {
+const App: React.FC = () => {
   // Quiz Generation State
   const [subjectInput, setSubjectInput] = useState('Toán học');
   const [gradeInput, setGradeInput] = useState('Lớp 9');
@@ -126,7 +126,7 @@ const AITaoDeThi: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-slate-800 font-sans overflow-hidden relative" style={{ background: 'radial-gradient(circle at top left, #81ecec, #74b9ff, #a29bfe)' }}>
+    <div className="min-h-screen text-slate-800 font-sans overflow-hidden">
       <div className="relative flex flex-col items-center justify-start min-h-screen py-12 px-4">
         
         <h1 className="text-4xl lg:text-5xl font-extrabold text-white text-center absolute top-8 z-20" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
@@ -230,4 +230,4 @@ const AITaoDeThi: React.FC = () => {
   );
 }
 
-export default AITaoDeThi;
+export default App;

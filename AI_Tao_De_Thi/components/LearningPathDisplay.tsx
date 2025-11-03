@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 interface AssessmentDisplayProps {
   assessment: string;
@@ -39,8 +41,11 @@ const AssessmentDisplay: React.FC<AssessmentDisplayProps> = ({ assessment, isLoa
       return (
         <ReactMarkdown
           className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-h3:font-bold prose-h3:text-xl prose-strong:text-slate-700"
-          children={assessment}
-        />
+          remarkPlugins={[remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {assessment}
+        </ReactMarkdown>
       );
     }
     return <InitialState />;

@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { QuizQuestion, StudentAnswers } from '../types';
 
 interface QuizViewProps {
@@ -26,9 +29,17 @@ const QuizView: React.FC<QuizViewProps> = ({ questions, answers, onAnswerChange,
       <form>
         {questions.map((q, index) => (
           <div key={q.id} className="py-6 border-b border-stone-200 last:border-b-0">
-            <p className="font-semibold text-slate-800 mb-1">
-              Câu {index + 1}: <span className="font-normal">{q.questionText}</span>
-            </p>
+            <div className="font-semibold text-slate-800 mb-1">
+              Câu {index + 1}:{' '}
+              <div className="font-normal inline">
+                <ReactMarkdown
+                    components={{ p: 'span' }}
+                    remarkPlugins={[remarkMath]}
+                    rehypePlugins={[rehypeKatex]}>
+                    {q.questionText}
+                </ReactMarkdown>
+              </div>
+            </div>
             <p className="text-sm text-orange-600 font-medium mb-4">Lĩnh vực: {q.skill}</p>
             
             {q.options && q.options.length > 0 ? (
@@ -47,7 +58,14 @@ const QuizView: React.FC<QuizViewProps> = ({ questions, answers, onAnswerChange,
                       className="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                       disabled={isSubmitted}
                     />
-                    <span className="ml-3 text-sm font-medium text-slate-700">{option}</span>
+                    <div className="ml-3 text-sm font-medium text-slate-700">
+                        <ReactMarkdown
+                            components={{ p: 'span' }}
+                            remarkPlugins={[remarkMath]}
+                            rehypePlugins={[rehypeKatex]}>
+                            {option}
+                        </ReactMarkdown>
+                    </div>
                   </label>
                 ))}
               </div>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { GoogleGenAI, Type } from "@google/genai";
+import './index.css';
 
 const AIOnThi = () => {
     const [inputType, setInputType] = useState('text');

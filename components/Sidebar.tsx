@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   return (
     <div className={`relative bg-gray-800 text-white flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'}`}>
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-700">
-            {isOpen && <span className="text-2xl font-bold">AI Hub</span>}
+            {isOpen && <span className="text-2xl font-bold">AI THCS</span>}
             <button onClick={() => setIsOpen(!isOpen)} className="p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                 <div className={`transition-transform duration-300 ${isOpen ? '' : 'rotate-180'}`}>
                     <ChevronLeftIcon />

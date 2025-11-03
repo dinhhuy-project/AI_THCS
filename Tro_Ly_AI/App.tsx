@@ -22,7 +22,7 @@ const fileToBase64 = (file: File): Promise<string> => {
 // FIX: Inferred LiveSession type from the return type of ai.live.connect
 type LiveSession = Awaited<ReturnType<typeof ai['live']['connect']>>;
 
-const TroLyAI: React.FC = () => {
+const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: WELCOME_MESSAGE },
   ]);
@@ -192,46 +192,67 @@ const TroLyAI: React.FC = () => {
                     setIsLoading(false);
                 },
                 onmessage: async (message) => {
-                    if(message.serverContent?.inputTranscription) {
-                        const text = message.serverContent.inputTranscription.text;
-                        setMessages(prev => {
-                            const newMessages = [...prev];
-                            newMessages[newMessages.length - 2].content = text;
-                            return newMessages;
+                    // Handle audio playback first
+                    const audioData = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+                    if (audioData) {
+                        const outputContext = outputAudioContextRef.current!;
+                        nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputContext.currentTime);
+                        const audioBuffer = await decodeAudioData(decode(audioData), outputContext, 24000, 1);
+                        const source = outputContext.createBufferSource();
+                        source.buffer = audioBuffer;
+                        source.connect(outputContext.destination);
+                        source.addEventListener('ended', () => {
+                           sourcesRef.current.delete(source);
                         });
-                    }
-                    if(message.serverContent?.outputTranscription) {
-                        const text = message.serverContent.outputTranscription.text;
-                         setMessages(prev => {
-                            const newMessages = [...prev];
-                            newMessages[newMessages.length - 1].content = text;
-                            return newMessages;
-                        });
+                        source.start(nextStartTimeRef.current);
+                        nextStartTimeRef.current += audioBuffer.duration;
+                        sourcesRef.current.add(source);
                     }
 
-                    const audioData = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
-                    if(audioData) {
-                         const outputContext = outputAudioContextRef.current!;
-                         nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputContext.currentTime);
-                         const audioBuffer = await decodeAudioData(decode(audioData), outputContext, 24000, 1);
-                         const source = outputContext.createBufferSource();
-                         source.buffer = audioBuffer;
-                         source.connect(outputContext.destination);
-                         source.addEventListener('ended', () => {
-                           sourcesRef.current.delete(source);
-                         });
-                         source.start(nextStartTimeRef.current);
-                         nextStartTimeRef.current += audioBuffer.duration;
-                         sourcesRef.current.add(source);
-                    }
-                    
-                    if(message.serverContent?.turnComplete) {
+                    const inputChunk = message.serverContent?.inputTranscription?.text;
+                    const outputChunk = message.serverContent?.outputTranscription?.text;
+                    const isTurnComplete = !!message.serverContent?.turnComplete;
+                
+                    // Atomically update transcriptions and turn completion status to prevent race conditions and display flicker.
+                    if (inputChunk || outputChunk || isTurnComplete) {
                         setMessages(prev => {
-                            const newMessages = [...prev];
-                            if(newMessages[newMessages.length - 2].content.trim() !== '' || newMessages[newMessages.length - 1].content.trim() !== '') {
-                                return [...newMessages, {role: 'user', content: ''}, {role: 'model', content: ''}];
+                            const nextMessages = [...prev];
+                            
+                            const userMessageIndex = nextMessages.length - 2;
+                            const modelMessageIndex = nextMessages.length - 1;
+
+                            if (userMessageIndex < 0 || modelMessageIndex < 0) {
+                              return prev; // Safeguard against invalid state.
                             }
-                            return newMessages;
+                            
+                            // Create new message objects for immutable update.
+                            const updatedUserMessage = { ...nextMessages[userMessageIndex] };
+                            const updatedModelMessage = { ...nextMessages[modelMessageIndex] };
+                            
+                            // Append new transcription chunks.
+                            if (inputChunk) {
+                                updatedUserMessage.content += inputChunk;
+                            }
+                            if (outputChunk) {
+                                updatedModelMessage.content += outputChunk;
+                            }
+                            
+                            nextMessages[userMessageIndex] = updatedUserMessage;
+                            nextMessages[modelMessageIndex] = updatedModelMessage;
+
+                            // If turn is complete, finalize and add placeholders for the next turn.
+                            if (isTurnComplete) {
+                                // Only add new placeholders if the completed turn had content.
+                                if (updatedUserMessage.content.trim() !== '' || updatedModelMessage.content.trim() !== '') {
+                                    return [
+                                        ...nextMessages,
+                                        { role: 'user', content: '' },
+                                        { role: 'model', content: '' },
+                                    ];
+                                }
+                            }
+                
+                            return nextMessages;
                         });
                     }
                 },
@@ -292,7 +313,7 @@ const TroLyAI: React.FC = () => {
   }, [isVoiceSessionActive]);
 
   return (
-    <div className="flex flex-col bg-teal-50 text-gray-800 font-sans" style={{height: '90vh'}}>
+    <div className="flex flex-col h-screen bg-teal-50 text-gray-800 font-sans">
       <header className="bg-teal-100 shadow-md p-4">
         <h1 className="text-xl font-bold text-center text-teal-800">📝 Trợ lý học tập AI</h1>
         <p className="text-center text-sm text-teal-700">Người bạn đồng hành của học sinh THCS</p>
@@ -318,4 +339,4 @@ const TroLyAI: React.FC = () => {
   );
 };
 
-export default TroLyAI;
+export default App;

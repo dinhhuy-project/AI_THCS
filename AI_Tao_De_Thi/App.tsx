@@ -126,7 +126,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-slate-800 font-sans overflow-hidden">
+    <div className="min-h-screen text-slate-800 font-sans overflow-hidden" style={{ background: 'radial-gradient(circle at top left, #ffecd2, #fcb69f, #ff7e5f)' }}>
       <div className="relative flex flex-col items-center justify-start min-h-screen py-12 px-4">
         
         <h1 className="text-4xl lg:text-5xl font-extrabold text-white text-center absolute top-8 z-20" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
